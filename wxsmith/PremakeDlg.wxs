@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<resource_extra>
+		<object root="1" />
+		<object name="ID_CHECKBOX1" class="wxCheckBox" variable="CheckBoxReplVars" member="yes" />
+		<object name="ID_CHECKBOX2" class="wxCheckBox" variable="CheckBoxUpgr" member="yes" />
+		<object name="ID_BUTTON1" class="wxButton" variable="ButtonExport" member="yes">
+			<handler function="OnButtonExportClick" entry="EVT_BUTTON" />
+		</object>
+		<object name="ID_BUTTON2" class="wxButton" variable="ButtonCancel" member="yes">
+			<handler function="OnButtonCancelClick" entry="EVT_BUTTON" />
+		</object>
+	</resource_extra>
+</wxsmith>
