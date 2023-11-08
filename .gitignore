@@ -1,0 +1,10 @@
+/.cache/
+/*.depend
+*.layout
+/bin/
+/compile_commands.json
+/objs/
+/premake4.lua
+/CMakeLists.txt
+/CMakeLists_Macros_default.txt
+/build/
