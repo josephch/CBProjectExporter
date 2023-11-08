@@ -44,7 +44,7 @@ void Premake4Exporter::RunExport(bool EvaluateVars, bool UpgrTargs)
 #ifndef __WXMSW__
     m_content.Replace("\r\n", "\n");
 #endif //__WXMSW__
-    Manager::Get()->GetFileManager()->Save(fn, m_content, wxFONTENCODING_SYSTEM, true, true);
+    Manager::Get()->GetFileManager()->Save(fn, m_content, wxFONTENCODING_SYSTEM, false, true);
 }
 
 wxString Premake4Exporter::EmitFlags(const wxString & compilerID, const wxArrayString & compilerFlags)

@@ -623,7 +623,7 @@ void CMakeListsExporter::ExportGlobalVariables()
 
         if (!wxsFileName.IsEmpty())
         {
-            fileMgr->Save(wxsFileName, m_ContentCMakeListGlobalVariables, wxFONTENCODING_SYSTEM, true, true);
+            fileMgr->Save(wxsFileName, m_ContentCMakeListGlobalVariables, wxFONTENCODING_SYSTEM, false, true);
             m_LogMgr->DebugLog(wxString::Format("Exported file: %s", wxsFileName));
             m_sGlobalVariableFileName = wxsFileName.Clone();
         }
@@ -808,7 +808,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             sMacroData.append(wxString::Format("cmake_minimum_required(VERSION %s) %s", CMAKE_MIN_VERSION_REQUIRED, EOL));
             sMacroData.append(EOL);
             sMacroData.append(ExportMacros(buildTarget));
-            fileMgr->Save(wsFullMacroFileName, sMacroData, wxFONTENCODING_SYSTEM, true, true);
+            fileMgr->Save(wsFullMacroFileName, sMacroData, wxFONTENCODING_SYSTEM, false, true);
             m_LogMgr->DebugLog(wxString::Format("Exported file: %s", wsFullMacroFileName));
             m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
             m_ContentCMakeListTarget.append(wxString::Format("# Include target macro definition file:%s", EOL));
@@ -1459,7 +1459,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             m_ContentCMakeListTarget.Replace("PROJECT_TOP_LEVEL_PATH_LINUX_HOLDER", projectTopLevelPathLinux);
             m_ContentCMakeListTarget.Replace("PLACE_HOLDER_GLOBAL_INCLUDE_FILE", UnixFilename(m_sGlobalVariableFileName, wxPATH_UNIX));
             // ====================================================================================
-            fileMgr->Save(wsFullFileName, m_ContentCMakeListTarget, wxFONTENCODING_SYSTEM, true, true);
+            fileMgr->Save(wsFullFileName, m_ContentCMakeListTarget, wxFONTENCODING_SYSTEM, false, true);
             m_LogMgr->DebugLog(wxString::Format("Exported file: %s", wsFullFileName));
             m_ContentCMakeListTopLevel.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s%s", EOL, EOL));
             m_ContentCMakeListTopLevel.append(wxString::Format("# CBP: %s , Target: %s  %s", project->GetFilename(), targetTitle, EOL));
@@ -1804,7 +1804,7 @@ void CMakeListsExporter::RunExport()
                 sCMakeListTopLevel.append(EOL);
                 // ====================================================================================
                 // Save the top level CMakeLists file
-                fileMgr->Save(wxsFileName, sCMakeListTopLevel, wxFONTENCODING_SYSTEM, true, true);
+                fileMgr->Save(wxsFileName, sCMakeListTopLevel, wxFONTENCODING_SYSTEM, false, true);
                 m_LogMgr->DebugLog(wxString::Format("Exported file: %s", wxsFileName));
                 m_sGlobalVariableFileName = wxsFileName.Clone();
             }
