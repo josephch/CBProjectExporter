@@ -18,15 +18,24 @@
 #endif
 
 #include <cbplugin.h> // for "class cbPlugin"
+#include "Exporter_PreMake5/premake5cb.h"
 
-class ProjectExporter : public cbPlugin
+class ProjectExporter : public cbToolPlugin
 {
     public:
         /** Constructor. */
         ProjectExporter();
+
         /** Destructor. */
         virtual ~ProjectExporter();
 
+        /** @brief Execute the plugin.
+         *
+         * This is the only function needed by a cbToolPlugin.
+         * This will be called when the user selects the plugin from the "Plugins"
+         * menu.
+         */
+        int Execute();
 
         /** This method is called by Code::Blocks and is used by the plugin
           * to add any menu items it needs on Code::Blocks's menu bar.\n
@@ -35,7 +44,7 @@ class ProjectExporter : public cbPlugin
           * just do nothing ;)
           * @param menuBar the wxMenuBar to create items in
           */
-        virtual void BuildMenu(wxMenuBar* menuBar);
+        virtual void BuildMenu(wxMenuBar * menuBar);
 
         /** This method is called by Code::Blocks core modules (EditorManager,
           * ProjectManager etc) and is used by the plugin to add any menu
@@ -52,7 +61,7 @@ class ProjectExporter : public cbPlugin
           * @param menu pointer to the popup menu
           * @param data pointer to FileTreeData object (to access/modify the file tree)
           */
-        virtual void BuildModuleMenu(const ModuleType type, wxMenu* menu, const FileTreeData* data = 0){}
+        virtual void BuildModuleMenu(const ModuleType type, wxMenu * menu, const FileTreeData * data = 0) {}
 
         /** This method is called by Code::Blocks and is used by the plugin
           * to add any toolbar items it needs on Code::Blocks's toolbar.\n
@@ -62,7 +71,10 @@ class ProjectExporter : public cbPlugin
           * @param toolBar the wxToolBar to create items on
           * @return The plugin should return true if it needed the toolbar, false if not
           */
-        virtual bool BuildToolBar(wxToolBar* toolBar){ return false; }
+        virtual bool BuildToolBar(wxToolBar * toolBar)
+        {
+            return false;
+        }
     protected:
         /** Any descendant plugin should override this virtual method and
           * perform any necessary initialization. This method is called by
@@ -88,9 +100,14 @@ class ProjectExporter : public cbPlugin
         virtual void OnRelease(bool appShutDown);
 
     private:
-        void RunExportAutotools();
-        void RunExportBakefile();
-        void RunExportPremake();
+        void RunExportAutotools(wxCommandEvent & event);
+        void RunExportBakefile(wxCommandEvent & event);
+        void RunExportPremake4(wxCommandEvent & event);
+        void RunExportPremake5(wxCommandEvent & event);
+        void RunExportCMake(wxCommandEvent & event);
+
+        premake5cb * pm5ExportClass;
+
 
         /** @brief Check whether a project is open.
           *
@@ -99,19 +116,19 @@ class ProjectExporter : public cbPlugin
         bool IsProjectOpen() const;
 
         /** @brief Delayed menu build to give Projects Importer a chance. */
-        void OnStartupDone(CodeBlocksEvent& event);
+        void OnStartupDone(CodeBlocksEvent & event);
 
         /** @brief Disable the menu item if no project is open. */
-        void OnProjectClose(CodeBlocksEvent& event);
+        void OnProjectClose(CodeBlocksEvent & event);
 
         /** @brief Enable the menu item. */
-        void OnProjectOpen(CodeBlocksEvent& event);
+        void OnProjectOpen(CodeBlocksEvent & event);
 
         /** @brief Enable the menu item. */
-        void OnProjectActivate(CodeBlocksEvent& event);
+        void OnProjectActivate(CodeBlocksEvent & event);
 
         /** @brief Ensure menu entry exists. */
-        void OnMenuCreateEnd(CodeBlocksEvent& event);
+        void OnMenuCreateEnd(CodeBlocksEvent & event);
         DECLARE_EVENT_TABLE();
 };
 

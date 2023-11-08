@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_plugin_manifest_file>
+    <SdkVersion major="2" minor="11"  release="0" />
+    <Plugin name="premake5cb">
+        <Value title="Premake5 exporter" />
+        <Value version="0.9" />
+        <Value description="Generate premake5 scripts from Code::Blocks workspaces" />
+        <Value author="Carsten Arnholm" />
+        <Value authorEmail="arnholm@arnholm.org" />
+        <Value authorWebsite="https://github.com/arnholm/" />
+        <Value thanksTo="" />
+        <Value license="GPL" />
+    </Plugin>
+</CodeBlocks_plugin_manifest_file>

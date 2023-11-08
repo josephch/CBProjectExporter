@@ -1,39 +1,39 @@
 #ifndef PREMAKEDLG_H
 #define PREMAKEDLG_H
 
-//(*Headers(PremakeDlg)
+//(*Headers(Premake4Dlg)
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include "scrollingdialog.h"
 //*)
 
-class PremakeDlg: public wxScrollingDialog
+class Premake4Dlg: public wxScrollingDialog
 {
-	public:
+    public:
 
-		PremakeDlg(wxWindow* parent);
-		virtual ~PremakeDlg();
+        Premake4Dlg(wxWindow * parent);
+        virtual ~Premake4Dlg();
 
-		//(*Declarations(PremakeDlg)
-		wxButton* ButtonExport;
-		wxCheckBox* CheckBoxReplVars;
-		wxCheckBox* CheckBoxUpgr;
-		wxButton* ButtonCancel;
-		//*)
+        //(*Declarations(Premake4Dlg)
+        wxButton * ButtonExport;
+        wxCheckBox * CheckBoxReplVars;
+        wxCheckBox * CheckBoxUpgr;
+        wxButton * ButtonCancel;
+        //*)
 
-	protected:
+    protected:
 
-		//(*Identifiers(PremakeDlg)
-		//*)
+        //(*Identifiers(Premake4Dlg)
+        //*)
 
-	private:
+    private:
 
-		//(*Handlers(PremakeDlg)
-		void OnButtonExportClick(wxCommandEvent& event);
-		void OnButtonCancelClick(wxCommandEvent& event);
-		//*)
+        //(*Handlers(Premake4Dlg)
+        void OnButtonExportClick(wxCommandEvent & event);
+        void OnButtonCancelClick(wxCommandEvent & event);
+        //*)
 
-		DECLARE_EVENT_TABLE()
+        DECLARE_EVENT_TABLE()
 };
 
 #endif

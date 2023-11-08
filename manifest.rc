@@ -1,0 +1,59 @@
+// Code::Blocks resource file generated from the manifext.xml file
+
+#include "wx/msw/wx.rc"
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+VS_VERSION_INFO        VERSIONINFO
+  FILEVERSION          0,4,0
+  PRODUCTVERSION       2022,8,4,12857
+  FILEFLAGSMASK        0x3fL // VS_FFI_FILEFLAGSMASK
+  // FILEFLAGS Can be a combination of the following OR'ed flags:
+  //    VS_FF_DEBUG,        VS_FF_PATCHED,      VS_FF_PRERELEASE,
+  //    VS_FF_PRIVATEBUILD, VS_FF_SPECIALBUILD, VS_FFI_FILEFLAGSMASK
+#ifdef __WXDEBUG__
+  FILEFLAGS            0x1L  // VS_FF_DEBUG|VS_FF_PRIVATEBUILD|VS_FF_PRERELEASE
+#else
+  FILEFLAGS            0x0L  // final version
+#endif
+  FILEOS               VOS_NT_WINDOWS32
+  // FILETYPE Can be one of the following values:
+  //   VFT_UNKNOWN, VFT_APP, VFT_DLL, VFT_DRV, VFT_FONT, VFT_VXD, VFT_STATIC_LIB
+  FILETYPE             VFT_DLL
+  FILESUBTYPE          VFT2_UNKNOWN // not used
+{
+  BLOCK "StringFileInfo"
+  {
+    BLOCK "040904E4" // Lang=US English, CharSet=Windows Multilingual
+    {
+      VALUE "Build",             "04-Aug-2022 SVN12857"
+      VALUE "Comments",          "Exports the active project.  Supported targets are Autotools, Bakefile, Premake4 script and CMakeList.txt."
+      VALUE "CompanyName",       "Alpha"
+      VALUE "Developer",         "Alpha"
+      VALUE "FileVersion",       "0.4.0"
+      VALUE "InternalName",      "ProjectExporter"
+      VALUE "LegalCopyright",    "GPL"
+      VALUE "LegalTrademarks",   "All rights reserved."
+      VALUE "OriginalFilename",  "ProjectExporter.dll"
+      VALUE "PrivateBuild",      ""
+      VALUE "ProductName",       "ProjectExporter"
+      VALUE "ProductVersion",    "0.4.0"
+      VALUE "SpecialBuild",      ""
+      VALUE "Support",           "http://wiki.codeblocks.org/index.php?title=Project_Exporter"
+      VALUE "Users",             ""
+    } // BLOCK "040904E4"
+  } // BLOCK "StringFileInfo"
+
+  BLOCK "VarFileInfo"
+  {
+    VALUE "Translation", 0x409, 1252 // 1252 = 0x04E4
+
+    // langID, one of the following language codes.
+    // 0x409 : U.S. English
+    // 0x809 : U.K. English
+    // charsetID, one of the following character-set identifiers.
+    // 1200 : Unicode
+    // 1252 : CharSet=Windows Multilingual
+  } // BLOCK "VarFileInfo"
+
+}

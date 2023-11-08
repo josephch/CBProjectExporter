@@ -1,6 +1,11 @@
-#ifndef EXPORTERBASE_H
-#define EXPORTERBASE_H
+#ifndef __EXPORTERBASE_H__
+#define __EXPORTERBASE_H__
 
+// System include files
+#include <wx/arrstr.h>
+
+// CB include files
+#include "cbproject.h"
 
 class ExporterBase
 {
@@ -13,21 +18,21 @@ class ExporterBase
         /** @brief List of included files. */
         wxArrayString IncludeFilesArray();
 
-        wxArrayString AppendOptionsArray(const wxArrayString& proj, const wxArrayString& targ, const OptionsRelation relation = orAppendToParentOptions);
+        wxArrayString AppendOptionsArray(const wxArrayString & proj, const wxArrayString & targ, const OptionsRelation relation = orAppendToParentOptions);
 
         /** @brief Convert backslashes to forward-slashes. */
-        wxString ConvertSlash(const wxString& source);
+        wxString ConvertSlash(const wxString & source);
 
         /** @brief Replace spaces with underscores. */
-        wxString ReplSpace(const wxString& source);
+        wxString ReplSpace(const wxString & source);
 
         /** @brief Removes the lib prefix if it exists. */
-        wxString RemLib(const wxString& source);
+        wxString RemLib(const wxString & source);
 
         /** @brief Returns true if @c target string is found in @c source array. */
-        bool StringExists(const wxArrayString& source, wxString target);
+        bool StringExists(const wxArrayString & source, wxString target);
 
-        cbProject* m_project;
+        cbProject * m_project;
         /** @brief Always clear (or assign) before usage. */
         //wxString m_tmpString;
         /** @brief Always clear (or assign) before usage. */
@@ -35,4 +40,4 @@ class ExporterBase
     private:
 };
 
-#endif // EXPORTERBASE_H
+#endif // __EXPORTERBASE_H__

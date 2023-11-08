@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_plugin_manifest_file>
-    <SdkVersion major="1" minor="11"  release="15" />
+    <SdkVersion major="2" minor="16" release="0" />
     <Plugin name="ProjectExporter">
         <Value title="Project Exporter" />
-        <Value version="0.3.2" />
-        <Value description="Exports the active project.  Supported targets are Autotools build system, Bakefile, and Premake4 script." />
+        <Value version="0.4.0" />
+        <Value description="Exports the active project.  Supported targets are Autotools, Bakefile, Premake4 script and CMakeList.txt." />
         <Value author="Alpha" />
         <Value authorEmail="" />
         <Value authorWebsite="http://wiki.codeblocks.org/index.php?title=Project_Exporter" />

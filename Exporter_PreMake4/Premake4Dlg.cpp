@@ -1,50 +1,53 @@
-#include <sdk.h> // Code::Blocks SDK
-#include "PremakeDlg.h"
-#include "PremakeExporter.h"
+// System include files
 
-//(*InternalHeaders(PremakeDlg)
+// CB include files
+#include <sdk.h> // Code::Blocks SDK
+#include "manager.h"
+#include <logmanager.h>
+
+// ProjectExporter include files
+#include "Premake4Dlg.h"
+#include "Premake4Exporter.h"
+
+//(*InternalHeaders(Premake4Dlg)
 #include <wx/xrc/xmlres.h>
 //*)
 
-//(*IdInit(PremakeDlg)
+//(*IdInit(Premake4Dlg)
 //*)
 
-BEGIN_EVENT_TABLE(PremakeDlg,wxScrollingDialog)
-	//(*EventTable(PremakeDlg)
-	//*)
+BEGIN_EVENT_TABLE(Premake4Dlg, wxScrollingDialog)
+    //(*EventTable(Premake4Dlg)
+    //*)
 END_EVENT_TABLE()
 
-PremakeDlg::PremakeDlg(wxWindow* parent)
+Premake4Dlg::Premake4Dlg(wxWindow * parent)
 {
-	//(*Initialize(PremakeDlg)
-	wxXmlResource::Get()->LoadObject(this,parent,_T("PremakeDlg"),_T("wxScrollingDialog"));
-	CheckBoxReplVars = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX1"));
-	CheckBoxUpgr = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX2"));
-	ButtonExport = (wxButton*)FindWindow(XRCID("ID_BUTTON1"));
-	ButtonCancel = (wxButton*)FindWindow(XRCID("ID_BUTTON2"));
-
-	Connect(XRCID("ID_BUTTON1"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&PremakeDlg::OnButtonExportClick);
-	Connect(XRCID("ID_BUTTON2"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&PremakeDlg::OnButtonCancelClick);
-	//*)
+    //(*Initialize(Premake4Dlg)
+    wxXmlResource::Get()->LoadObject(this, parent, "Premake4Dlg", "wxScrollingDialog");
+    CheckBoxReplVars = (wxCheckBox *)FindWindow(XRCID("ID_CHECKBOX1"));
+    CheckBoxUpgr = (wxCheckBox *)FindWindow(XRCID("ID_CHECKBOX2"));
+    ButtonExport = (wxButton *)FindWindow(XRCID("ID_BUTTON1"));
+    ButtonCancel = (wxButton *)FindWindow(XRCID("ID_BUTTON2"));
+    Connect(XRCID("ID_BUTTON1"), wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&Premake4Dlg::OnButtonExportClick);
+    Connect(XRCID("ID_BUTTON2"), wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&Premake4Dlg::OnButtonCancelClick);
+    //*)
 }
 
-PremakeDlg::~PremakeDlg()
+Premake4Dlg::~Premake4Dlg()
 {
-	//(*Destroy(PremakeDlg)
-	//*)
+    //(*Destroy(Premake4Dlg)
+    //*)
 }
 
-
-void PremakeDlg::OnButtonExportClick(wxCommandEvent& event)
+void Premake4Dlg::OnButtonExportClick(wxCommandEvent & event)
 {
-    PremakeExporter *ExportObject = new PremakeExporter();
+    Premake4Exporter * ExportObject = new Premake4Exporter();
     ExportObject->RunExport(CheckBoxReplVars->IsChecked(), CheckBoxUpgr->IsChecked());
-    Manager::Get()->GetLogManager()->Log(wxT("Premake script exported"));
     EndModal(wxID_OK);
 }
 
-void PremakeDlg::OnButtonCancelClick(wxCommandEvent& event)
+void Premake4Dlg::OnButtonCancelClick(wxCommandEvent & event)
 {
-    Manager::Get()->GetLogManager()->Log(wxT("Premake export canceled"));
     EndModal(wxID_CANCEL);
 }

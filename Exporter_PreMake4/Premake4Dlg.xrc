@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resource xmlns="http://www.wxwidgets.org/wxxrc">
-	<object class="wxScrollingDialog" name="PremakeDlg">
+	<object class="wxScrollingDialog" name="Premake4Dlg">
 		<title>Export Premake...</title>
 		<centered>1</centered>
 		<tooltip>Replace global and project variables with their value</tooltip>

@@ -1,7 +1,7 @@
 #ifndef AUTOTOOLSEXPORTER_H
 #define AUTOTOOLSEXPORTER_H
 
-#include "ExporterBase.h"
+#include "../ExporterBase.h"
 
 
 class AutotoolsExporter : public ExporterBase

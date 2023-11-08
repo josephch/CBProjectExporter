@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="premake5cb" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="cb/;pm/" />
+		<Build>
+			<Target title="to_codeblocks_wx30">
+				<Option output="$(#cb.lib)/codeblocks/plugins/premake5cb" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".objs/to_codeblocks_wx30" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option parameters="--debug-log --multiple-instance --no-splash-screen --verbose -p debug --no-ipc " />
+				<Option host_application="$(#cb.bin)/codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="`/usr/local/bin/wx-config --version=3.0 --toolkit=gtk2 --cxxflags`" />
+					<Add option="-g" />
+					<Add directory="$(#cb.include)" />
+					<Add directory="$(#cb.include)/tinyxml" />
+					<Add directory="./" />
+				</Compiler>
+				<Linker>
+					<Add option="`/usr/local/bin/wx-config --version=3.0 --toolkit=gtk2 --libs`" />
+					<Add library="codeblocks" />
+					<Add directory="$(#cb.lib)" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="zip -j9 $(#cb)/share/codeblocks/premake5cb.zip manifest.xml" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-fPIC" />
+			<Add option="-std=c++11" />
+			<Add option="-DNOPCH" />
+		</Compiler>
+		<Linker>
+			<Add option="-Wl,--no-undefined" />
+		</Linker>
+		<ExtraCommands>
+			<Add before="[[ GetProjectManager().SaveAllProjects(); ]]" />
+			<Mode after="always" />
+		</ExtraCommands>
+		<Unit filename="PM5SettingsDialog.cpp" />
+		<Unit filename="PM5SettingsDialog.h" />
+		<Unit filename="manifest.xml" />
+		<Unit filename="pm_base.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_base.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_config.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_config.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_config_cb.cpp">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="pm_config_cb.h">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="pm_defaults.cpp" />
+		<Unit filename="pm_defaults.h" />
+		<Unit filename="pm_file.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_file.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_file_cb.cpp">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="pm_file_cb.h">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="pm_project.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_project.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_project_cb.cpp">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="pm_project_cb.h">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="pm_regex.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_regex.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_settings.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_settings.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_utils.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_utils.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_workspace.cpp">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_workspace.h">
+			<Option virtualFolder="pm/" />
+		</Unit>
+		<Unit filename="pm_workspace_cb.cpp">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="pm_workspace_cb.h">
+			<Option virtualFolder="cb/" />
+		</Unit>
+		<Unit filename="premake5cb.cpp" />
+		<Unit filename="premake5cb.h" />
+		<Unit filename="wxsmith/PM5SettingsDialog.wxs" />
+		<Extensions>
+			<wxsmith version="1">
+				<resources>
+					<wxScrollingDialog wxs="wxsmith/PM5SettingsDialog.wxs" src="PM5SettingsDialog.cpp" hdr="PM5SettingsDialog.h" fwddecl="0" i18n="1" name="PM5SettingsDialog" language="CPP" />
+				</resources>
+			</wxsmith>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

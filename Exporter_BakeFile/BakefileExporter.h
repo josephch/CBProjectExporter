@@ -1,7 +1,7 @@
 #ifndef BAKEFILE_EXPORTER_H
 #define BAKEFILE_EXPORTER_H
 
-#include "ExporterBase.h"
+#include "../ExporterBase.h"
 
 
 class BakefileExporter : public ExporterBase
@@ -14,8 +14,8 @@ class BakefileExporter : public ExporterBase
         void RunExport();
     protected:
     private:
-        wxArrayString EmitFlags(const wxString& compilerID, const wxArrayString& compilerFlags, wxArrayString& unrecognizedFlags);
-        wxString GetOptions(const wxString& source);
+        wxArrayString EmitFlags(const wxString & compilerID, const wxArrayString & compilerFlags, wxArrayString & unrecognizedFlags);
+        wxString GetOptions(const wxString & source);
 
         wxArrayString m_options;
 };

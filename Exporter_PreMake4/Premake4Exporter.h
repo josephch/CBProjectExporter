@@ -1,16 +1,16 @@
 #ifndef PREMAKE_EXPORTER_H
 #define PREMAKE_EXPORTER_H
 
-#include "ExporterBase.h"
+#include "../ExporterBase.h"
 
 
-class PremakeExporter : public ExporterBase
+class Premake4Exporter : public ExporterBase
 {
     public:
         /** Default constructor */
-        PremakeExporter();
+        Premake4Exporter();
         /** Default destructor */
-        virtual ~PremakeExporter();
+        virtual ~Premake4Exporter();
         void RunExport(bool EvaluateVars, bool UpgrTargs);
     protected:
     private:
@@ -22,16 +22,16 @@ class PremakeExporter : public ExporterBase
           * @return wxString A quoted, comma-separated list of Premake4 flags.
           *
           */
-        wxString EmitFlags(const wxString& compilerID, const wxArrayString& compilerFlags);
+        wxString EmitFlags(const wxString & compilerID, const wxArrayString & compilerFlags);
 
         /** @brief Emit a quoted, comma-separated list of defines. */
-        wxString EmitDefines(const wxArrayString& compilerFlags);
+        wxString EmitDefines(const wxArrayString & compilerFlags);
 
         /** @brief Add escape sequences to quotes and backslashes. */
-        wxString AddEscapes(const wxString& source);
+        wxString AddEscapes(const wxString & source);
 
         /** @brief Replace Code::Blocks variables if @c repl is true. */
-        wxString ReplVars(const wxString& source, bool repl);
+        wxString ReplVars(const wxString & source, bool repl);
 
         /** @brief Export project as-is. */
         void ExportStraight(bool EvaluateVars);

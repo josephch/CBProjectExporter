@@ -12,12 +12,12 @@
 				<Option working_dir="$(TARGET_OUTPUT_DIR)" />
 				<Option object_output="../../../.objs$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)/plugins/ProjectExporter" />
 				<Option type="3" />
+				<Option compiler="gcc" />
 				<Option host_application="../../../devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)/codeblocks.exe" />
 				<Option run_host_application_in_terminal="0" />
 				<ExtraCommands>
 					<Add before="cmd /c if not exist $(TARGET_OUTPUT_DIR) mkdir $(TARGET_OUTPUT_DIR)" />
-					<Add before="cmd /c if exist ..\..\..\devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)\share\CodeBlocks\ProjectExporter.zip del  ..\..\..\devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)\share\CodeBlocks\ProjectExporter.zip" />
-
+					<Add after="cmd /c if exist ..\..\..\devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)\share\CodeBlocks\ProjectExporter.zip del  ..\..\..\devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)\share\CodeBlocks\ProjectExporter.zip" />
 					<Add after="zip -jq9 ..\..\..\devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)\share\CodeBlocks\ProjectExporter.zip manifest.xml Exporter_PreMake4/*.xrc" />
 					<Mode after="always" />
 				</ExtraCommands>
@@ -43,27 +43,24 @@
 			<Add option="-DcbDEBUG" />
 			<Add option="-DwxUSE_UNICODE" />
 			<Add option="-D_WIN$(#CB_BUILD.OSBITS)" />
-			<Add directory="$(#WXWIDGETS.include)" />
-			<Add directory="$(#WXWIDGETS.lib)/gcc_dll$(#WXWIDGETS.WX_CFG)/msw$(#WXWIDGETS.WX_SUFFIX)" />
+			<Add option="`$(#WXWIDGETS.WX_CONFIG) --cflags`" />
 			<Add directory="../../../include" />
 			<Add directory="../../../sdk/wxscintilla/include" />
 			<Add directory="../../../include/tinyxml" />
 		</Compiler>
 		<ResourceCompiler>
-			<Add directory="$(#WXWIDGETS.include)" />
-			<Add directory="$(#WXWIDGETS)/lib/gcc_dll$(#WXWIDGETS.WX_CFG)/msw$(#WXWIDGETS.WX_SUFFIX)" />
+			<Add option="`$(#WXWIDGETS.WX_CONFIG) --cflags`" />
 		</ResourceCompiler>
 		<Linker>
 			<Add option="-Wl,--enable-auto-import" />
 			<Add option="-Wl,--no-undefined" />
 			<Add option="-mthreads" />
 			<Add library="codeblocks" />
-			<Add library="wxmsw$(#WXWIDGETS.WX_VERSION)$(#WXWIDGETS.WX_SUFFIX)" />
+			<Add option="`$(#WXWIDGETS.WX_CONFIG) --libs std,aui,propgrid`" />
 			<Add library="ole32" />
 			<Add library="uuid" />
 			<Add library="rpcrt4" />
 			<Add directory="../../../devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)" />
-			<Add directory="$(#WXWIDGETS.lib)/gcc_dll$(#WXWIDGETS.WX_CFG)" />
 		</Linker>
 		<Unit filename="ExporterBase.cpp" />
 		<Unit filename="ExporterBase.h" />
@@ -111,11 +108,11 @@
 		<Unit filename="Exporter_PreMake5/wxsmith/PM5SettingsDialog.wxs" />
 		<Unit filename="ProjectExporter.cpp" />
 		<Unit filename="ProjectExporter.h" />
-		<Unit filename="wxsmith/PremakeDlg.wxs" />
-		<Unit filename="manifest.xml" />
-		<Unit filename="manifest.rc" >
+		<Unit filename="manifest.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
+		<Unit filename="manifest.xml" />
+		<Unit filename="wxsmith/PremakeDlg.wxs" />
 		<Extensions>
 			<cbSystemView>
 				<target name="#project#">
