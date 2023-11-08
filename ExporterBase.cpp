@@ -1,5 +1,6 @@
 #include <sdk.h> // Code::Blocks SDK
 #include <wx/textfile.h>
+#include <wx/regex.h>
 #include "ExporterBase.h"
 
 ExporterBase::ExporterBase()

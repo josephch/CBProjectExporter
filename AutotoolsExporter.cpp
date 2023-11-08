@@ -1,6 +1,8 @@
 #include <sdk.h> // Code::Blocks SDK
 #include <wx/textfile.h>
+#include <wx/regex.h>
 #include "AutotoolsExporter.h"
+#include "macrosmanager.h"
 
 AutotoolsExporter::AutotoolsExporter()
 {

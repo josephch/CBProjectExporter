@@ -1,6 +1,9 @@
 #ifndef EXPORTERBASE_H
 #define EXPORTERBASE_H
 
+#include <wx/arrstr.h>
+#include "cbproject.h"
+#include "logmanager.h"
 
 class ExporterBase
 {

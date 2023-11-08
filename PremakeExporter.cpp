@@ -1,5 +1,7 @@
 #include <sdk.h> // Code::Blocks SDK
 #include "PremakeExporter.h"
+#include "filemanager.h"
+#include "macrosmanager.h"
 
 PremakeExporter::PremakeExporter()
 {
@@ -36,7 +38,7 @@ void PremakeExporter::RunExport(bool EvaluateVars, bool UpgrTargs)
 #ifndef __WXMSW__
     m_content.Replace(wxT("\r\n"), wxT("\n"));
 #endif //__WXMSW__
-    Manager::Get()->GetFileManager()->Save(fn, m_content, wxFONTENCODING_SYSTEM, true);
+    Manager::Get()->GetFileManager()->Save(fn, m_content, wxFONTENCODING_SYSTEM, false, true); //setting bom to true with wxFONTENCODING_SYSTEM gives crash
 }
 
 wxString PremakeExporter::EmitFlags(const wxString& compilerID, const wxArrayString& compilerFlags)

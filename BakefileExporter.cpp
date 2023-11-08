@@ -1,6 +1,7 @@
 #include <sdk.h> // Code::Blocks SDK
-#include <tinyxml/tinywxuni.h>
+#include "tinyxml.h"
 #include "BakefileExporter.h"
+#include "macrosmanager.h"
 
 BakefileExporter::BakefileExporter()
 {
