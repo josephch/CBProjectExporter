@@ -1054,8 +1054,11 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             break;
 
         case ttStaticLib:
-        case ttDynamicLib:
             m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}\%s\")%s", wxsOutputDir, EOL));
+            break;
+
+        case ttDynamicLib:
+            m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}\%s\")%s", wxsOutputDir, EOL));
             break;
 
         default:
