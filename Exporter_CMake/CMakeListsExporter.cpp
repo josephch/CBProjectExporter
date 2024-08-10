@@ -1485,59 +1485,26 @@ void CMakeListsExporter::RunExport()
     wxString tmpStringA, tmpStringB, tmpStringC;
     wxArrayString tmpArrayA, tmpArrayB, tmpArrayC;
     ProjectManager * prjManager = Manager::Get()->GetProjectManager();
-    ProjectsArray * prjArr = prjManager->GetProjects();
+    cbProject * project = prjManager->GetActiveProject();
 
     wxString sCMakeProjectListTopLevelCommands;
 
-    for (unsigned int i = 0; i < prjArr->GetCount(); ++i)
+    if (project)
     {
-        cbProject * project = prjArr->Item(i);
-
-        if (!project)
-        {
-            continue;
-        }
-
         wxString projectTitle = project->GetTitle();
         wxString projectTopLevelPathWindows = UnixFilename(project->GetCommonTopLevelPath(), wxPATH_WIN);
         wxString projectTopLevelPathLinux = UnixFilename(project->GetCommonTopLevelPath(), wxPATH_UNIX);
         wxString tgtStr(project->GetActiveBuildTarget());
-
         if (tgtStr.IsEmpty())
         {
-            tgtStr = project->GetFirstValidBuildTargetName();    // last-chance default
+            fprintf(stderr, "CMakeListsExporter::%s:%d build target not available for project %s\n", __FUNCTION__, __LINE__, projectTitle.ToUTF8().data());
+            return;
         }
+        fprintf(stderr, "CMakeListsExporter::%s:%d build target %s for project %s\n", __FUNCTION__, __LINE__, tgtStr.ToUTF8().data(), projectTitle.ToUTF8().data());
 
-        wxArrayString tmpArrayVBT = project->GetExpandedVirtualBuildTargetGroup(tgtStr);
-        unsigned int icountVBT = tmpArrayVBT.GetCount();
-        unsigned int icountPRJ = tmpArrayVBT.GetCount();
+        ProjectBuildTarget * buildTarget = project->GetBuildTarget(tgtStr);
 
-        if (icountPRJ == 0)
-        {
-            icountPRJ = project->GetBuildTargetsCount();
-        }
-
-        ProjectBuildTarget * buildTarget;
-
-        for (unsigned int i = 0; i < icountPRJ; i++)
-        {
-            if (icountVBT == 0)
-            {
-                buildTarget = project->GetBuildTarget(i);
-            }
-            else
-            {
-                buildTarget = project->GetBuildTarget(tmpArrayVBT[i]);
-            }
-
-            if (!buildTarget)
-            {
-                continue;
-            }
-
-            ExportBuildTarget(project,  buildTarget);
-            iProjectCountSaved++;
-        } // For target looping through project file
+        ExportBuildTarget(project,  buildTarget);
 
         // ====================================================================================
         // ====================================================================================
