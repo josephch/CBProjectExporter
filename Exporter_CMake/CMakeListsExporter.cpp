@@ -14,6 +14,7 @@
 #include "manager.h"
 #include "macrosmanager.h"
 #include "uservarmanager.h"
+#include "wx/tokenzr.h"
 //#include "tinyxml.h"
 
 // ProjectExporter include files
@@ -1151,10 +1152,54 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
         {
             tmpStringA = tmpArrayA[j].Clone();
             ConvertMacros(tmpStringA, ConvertMacro_DirSeperator::WindowsExpand);
-            m_ContentCMakeListTarget.append(wxString::Format("list(APPEND LINKER_OPTIONS_LIST \"%s\")%s", tmpStringA, EOL));
+            if (tmpStringA.StartsWith('`'))
+            {
+                bool done = false;
+                bool pkgConfigFound = false;
+                wxStringTokenizer tokenizer(tmpStringA.substr(1), wxDEFAULT_DELIMITERS);
+                while ( tokenizer.HasMoreTokens() )
+                {
+                    wxString token = tokenizer.GetNextToken();
+                    if (pkgConfigFound)
+                    {
+                        if (!token.StartsWith('-'))
+                        {
+                            wxString package = token;
+                            size_t last = package.find_last_not_of(L'`');
+                            if(last != wxString::npos)
+                                package.erase(last + 1);
+                            wxString prefix = package.Upper();
+                            m_ContentCMakeListTarget.append(wxT("find_package(PkgConfig REQUIRED)\n"));
+                            m_ContentCMakeListTarget.append(wxString::Format("pkg_check_modules(%s REQUIRED %s)\n", prefix, package));
+                            m_ContentCMakeListTarget.append(wxString::Format("list(APPEND LINKER_OPTIONS_LIST \"${%s_LINK_LIBRARIES}\")%s", prefix, EOL));
+                            done = true;
+                            break;
+                        }
+                    }
+                    else if (token == wxT("pkg-config"))
+                    {
+                        pkgConfigFound = true;
+                    }
+                    else if (token == wxT("wx-config"))
+                    {
+                        m_ContentCMakeListTarget.append(wxT("find_package(wxWidgets REQUIRED)\n"));
+                        m_ContentCMakeListTarget.append(wxString::Format("list(APPEND LINKER_OPTIONS_LIST \"${wxWidgets_LIBRARIES}\")%s", EOL));
+                        done = true;
+                        break;
+                    }
+                    // process token here
+                }
+                if (done)
+                    continue;
+                m_ContentCMakeListTarget.append(wxString::Format("list(APPEND LINKER_OPTIONS_LIST \"%s\")%s", tmpStringA, EOL));
+            }
+            else
+            {
+                m_ContentCMakeListTarget.append(wxString::Format("list(APPEND LINKER_OPTIONS_LIST \"%s\")%s", tmpStringA, EOL));
+            }
         }
 
-        m_ContentCMakeListTarget.append(wxString::Format("target_link_options(${TARGET_OUTPUTNAME} PRIVATE ${LINKER_OPTIONS_LIST})%s", EOL));
+        m_ContentCMakeListTarget.append(wxString::Format("target_link_libraries(${TARGET_OUTPUTNAME} PRIVATE ${LINKER_OPTIONS_LIST})%s", EOL));
         m_ContentCMakeListTarget.append(wxString::Format("unset(LINKER_OPTIONS_LIST)%s", EOL));
         m_ContentCMakeListTarget.append(EOL);
     }
