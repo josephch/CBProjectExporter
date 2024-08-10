@@ -1507,6 +1507,12 @@ void CMakeListsExporter::RunExport()
 
         ProjectBuildTarget * buildTarget = project->GetBuildTarget(tgtStr);
 
+        if (!buildTarget)
+        {
+            fprintf(stderr, "CMakeListsExporter::%s:%d null build target %s for project %s\n", __FUNCTION__, __LINE__, tgtStr.ToUTF8().data(), projectTitle.ToUTF8().data());
+            return;
+        }
+
         ExportBuildTarget(project,  buildTarget);
 
         // ====================================================================================
