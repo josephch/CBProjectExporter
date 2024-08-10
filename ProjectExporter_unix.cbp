@@ -13,14 +13,14 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="`pkg-config --cflags codeblocks`" />
-					<Add option="`wx-config --cflags  --version=3.0`" />
+					<Add option="`wx-config --cflags`" />
 					<Add option="-g" />
 					<Add option="-Wall" />
 					<Add option="-DTIXML_USE_STL" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs codeblocks`" />
-					<Add option="`wx-config --libs  --version=3.0`" />
+					<Add option="`wx-config --libs`" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="zip -j9 bin/ProjectExporter.zip manifest.xml Exporter_PreMake4/*.xrc" />
@@ -36,7 +36,6 @@
 		<Linker>
 			<Add option="-Wl,--no-undefined" />
 		</Linker>
-
 		<Unit filename="ExporterBase.cpp" />
 		<Unit filename="ExporterBase.h" />
 		<Unit filename="Exporter_AutoTools/AutotoolsExporter.cpp" />
@@ -83,13 +82,13 @@
 		<Unit filename="Exporter_PreMake5/wxsmith/PM5SettingsDialog.wxs" />
 		<Unit filename="ProjectExporter.cpp" />
 		<Unit filename="ProjectExporter.h" />
-		<Unit filename="wxsmith/PremakeDlg.wxs" />
-		<Unit filename="manifest.xml" />
-		<Unit filename="manifest.rc" >
+		<Unit filename="manifest.rc">
 			<Option compilerVar="WINDRES" />
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
+		<Unit filename="manifest.xml" />
+		<Unit filename="wxsmith/PremakeDlg.wxs" />
 		<Extensions>
 			<wxsmith version="1">
 				<resources>
