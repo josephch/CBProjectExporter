@@ -688,6 +688,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
 {
     wxString tmpStringA, tmpStringB, tmpStringC;
     wxArrayString tmpArrayA, tmpArrayB, tmpArrayC;
+    wxArrayString findPackageAdded, packageCheckModulesAdded;
     wxString prjBasepath = project->GetBasePath();
     wxString projectTopLevelPathWindows = UnixFilename(project->GetCommonTopLevelPath(), wxPATH_WIN);
     wxString projectTopLevelPathLinux = UnixFilename(project->GetCommonTopLevelPath(), wxPATH_UNIX);
@@ -865,6 +866,59 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
         }
         else
         {
+            const wxString &compileOption = tmpArrayA[j];
+            if (compileOption.StartsWith('`'))
+            {
+                bool done = false;
+                bool pkgConfigFound = false;
+                wxStringTokenizer tokenizer(compileOption.substr(1), wxDEFAULT_DELIMITERS);
+                while ( tokenizer.HasMoreTokens() )
+                {
+                    wxString token = tokenizer.GetNextToken();
+                    if (pkgConfigFound)
+                    {
+                        if (!token.StartsWith('-'))
+                        {
+                            wxString package = token;
+                            size_t last = package.find_last_not_of(L'`');
+                            if(last != wxString::npos)
+                                package.erase(last + 1);
+                            wxString prefix = package.Upper();
+                            if (wxNOT_FOUND == findPackageAdded.Index(wxT("PkgConfig")))
+                            {
+                                tmpStringA.append(wxT("find_package(PkgConfig REQUIRED)\n"));
+                                findPackageAdded.push_back(wxT("PkgConfig"));
+                            }
+                            if (wxNOT_FOUND == packageCheckModulesAdded.Index(package))
+                            {
+                                tmpStringA.append(wxString::Format("pkg_check_modules(%s REQUIRED %s)\n", prefix, package));
+                                packageCheckModulesAdded.push_back(package);
+                            }
+                            tmpStringA.append(wxString::Format("include_directories(\"${%s_INCLUDE_DIRS}\")%s", prefix, EOL));
+                            tmpStringA.append(wxString::Format("set(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} ${%s_CFLAGS_OTHER}\")%s", prefix, EOL));
+                            done = true;
+                            break;
+                        }
+                    }
+                    else if (token == wxT("pkg-config"))
+                    {
+                        pkgConfigFound = true;
+                    }
+                    else if (token == wxT("wx-config"))
+                    {
+                        if (wxNOT_FOUND == findPackageAdded.Index(wxT("wxWidgets")))
+                        {
+                            tmpStringA.append(wxT("find_package(wxWidgets REQUIRED)\n"));
+                            findPackageAdded.push_back(wxT("wxWidgets"));
+                        }
+                        tmpStringA.append(wxString::Format("include(${wxWidgets_USE_FILE})%s", EOL));
+                        done = true;
+                        break;
+                    }
+                }
+                if (done)
+                    continue;
+            }
             wxString tmpStringCVT = tmpArrayA[j].Clone();
             ConvertMacros(tmpStringCVT, ConvertMacro_DirSeperator::WindowsExpand);
             tmpStringA += wxString::Format("set(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} %s\")%s", tmpStringCVT, EOL);
@@ -1124,8 +1178,16 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
                             if(last != wxString::npos)
                                 package.erase(last + 1);
                             wxString prefix = package.Upper();
-                            m_ContentCMakeListTarget.append(wxT("find_package(PkgConfig REQUIRED)\n"));
-                            m_ContentCMakeListTarget.append(wxString::Format("pkg_check_modules(%s REQUIRED %s)\n", prefix, package));
+                            if (wxNOT_FOUND == findPackageAdded.Index(wxT("PkgConfig")))
+                            {
+                                m_ContentCMakeListTarget.append(wxT("find_package(PkgConfig REQUIRED)\n"));
+                                findPackageAdded.push_back(wxT("PkgConfig"));
+                            }
+                            if (wxNOT_FOUND == packageCheckModulesAdded.Index(package))
+                            {
+                                m_ContentCMakeListTarget.append(wxString::Format("pkg_check_modules(%s REQUIRED %s)\n", prefix, package));
+                                packageCheckModulesAdded.push_back(package);
+                            }
                             m_ContentCMakeListTarget.append(wxString::Format("list(APPEND LINKER_OPTIONS_LIST \"${%s_LINK_LIBRARIES}\")%s", prefix, EOL));
                             done = true;
                             break;
@@ -1137,7 +1199,11 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
                     }
                     else if (token == wxT("wx-config"))
                     {
-                        m_ContentCMakeListTarget.append(wxT("find_package(wxWidgets REQUIRED)\n"));
+                        if (wxNOT_FOUND == findPackageAdded.Index(wxT("wxWidgets")))
+                        {
+                            m_ContentCMakeListTarget.append(wxT("find_package(wxWidgets REQUIRED)\n"));
+                            findPackageAdded.push_back(wxT("wxWidgets"));
+                        }
                         m_ContentCMakeListTarget.append(wxString::Format("list(APPEND LINKER_OPTIONS_LIST \"${wxWidgets_LIBRARIES}\")%s", EOL));
                         done = true;
                         break;
