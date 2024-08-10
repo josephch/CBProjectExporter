@@ -7,7 +7,6 @@
 // CB include files
 #include <sdk.h> // Code::Blocks SDK
 #include "cbworkspace.h"
-#include "compilerfactory.h"
 #include "editormanager.h"
 #include "filemanager.h"
 #include "logmanager.h"
@@ -722,9 +721,6 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
         m_ContentCMakeListTarget.append(wxString::Format("# Project CommonTopLevelPath:  PROJECT_TOP_LEVEL_PATH_LINUX_HOLDER%s", EOL));
     }
 
-    m_ContentCMakeListTarget.append(wxString::Format("set(PROJECT_TOP_LEVEL_PATH_WINDOWS \"PROJECT_TOP_LEVEL_PATH_WINDOWS_HOLDER\")%s", EOL));
-    m_ContentCMakeListTarget.append(wxString::Format("set(PROJECT_TOP_LEVEL_PATH_LINUX \"PROJECT_TOP_LEVEL_PATH_LINUX_HOLDER\")%s", EOL));
-
     // ====================================================================================
     // Target Output Type
     switch (buildTarget->GetTargetType())
@@ -776,50 +772,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
     m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
     m_ContentCMakeListTarget.append(EOL);
     // ====================================================================================
-    m_ContentCMakeListTarget.append(wxString::Format("# Include global variable definition file:%s", EOL));
-    m_ContentCMakeListTarget.append(wxString::Format("include(PLACE_HOLDER_GLOBAL_INCLUDE_FILE)%s", EOL));
-    m_ContentCMakeListTarget.append(EOL);
-    // ====================================================================================
-    m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
-    m_ContentCMakeListTarget.append(EOL);
-    // ====================================================================================
-    // output target macro file
-    wxFileName wxfTargetMacroFileName(sTargetRootDir);
-
-    if (wxfTargetMacroFileName.DirExists())
-    {
-        wxfTargetMacroFileName.SetFullName(wxString::Format("CMakeLists_Macros_%s.txt", targetTitle));
-        wxString wsFullMacroFileName(wxfTargetMacroFileName.GetFullPath());
-
-        if (wxfTargetMacroFileName.FileExists())
-        {
-            m_LogMgr->DebugLogError(wxString::Format("Deleting file: %s!!!", wsFullMacroFileName));
-            ::wxRemoveFile(wxfTargetMacroFileName.GetFullPath());
-
-            if (wxfTargetMacroFileName.FileExists())
-            {
-                m_LogMgr->DebugLogError(wxString::Format("File still exists: %s!!!", wsFullMacroFileName));
-            }
-        }
-
-        if (!wxfTargetMacroFileName.FileExists())
-        {
-            FileManager * fileMgr = Manager::Get()->GetFileManager();
-            wxString sMacroData = wxEmptyString;
-            sMacroData.append(wxString::Format("cmake_minimum_required(VERSION %s) %s", CMAKE_MIN_VERSION_REQUIRED, EOL));
-            sMacroData.append(EOL);
-            sMacroData.append(ExportMacros(buildTarget));
-            fileMgr->Save(wsFullMacroFileName, sMacroData, wxFONTENCODING_SYSTEM, false, true);
-            m_LogMgr->DebugLog(wxString::Format("Exported file: %s", wsFullMacroFileName));
-            m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
-            m_ContentCMakeListTarget.append(wxString::Format("# Include target macro definition file:%s", EOL));
-            m_ContentCMakeListTarget.append(wxString::Format("include(\"%s\")%s", UnixFilename(wsFullMacroFileName, wxPATH_UNIX), EOL));
-        }
-    }
-    else
-    {
-        m_LogMgr->DebugLogError(wxString::Format("Could not save %s as the directory does not exist!!!", wxfTargetMacroFileName.GetFullPath()));
-    }
+    m_ContentCMakeListTarget.append(wxString::Format("cmake_minimum_required(VERSION %s) %s", CMAKE_MIN_VERSION_REQUIRED, EOL));
 
     // ====================================================================================
     m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
@@ -976,7 +929,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
         {
             tmpStringA = tmpArraySrc[j];
             ConvertMacros(tmpStringA, m_eMacroConvertDirectorySeperator);
-            m_ContentCMakeListTarget.append(wxString::Format("            \"${PROJECT_TOP_LEVEL_PATH_LINUX}\%s\"%s", tmpStringA, EOL));
+            m_ContentCMakeListTarget.append(wxString::Format("            \"%s\"%s", tmpStringA, EOL));
         }
 
         if (!tmpArrayhdr.IsEmpty())
@@ -991,7 +944,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
 
                 if ((buildTarget->GetTargetType() == ttStaticLib) || (buildTarget->GetTargetType() == ttDynamicLib))
                 {
-                    m_ContentCMakeListTarget.append(wxString::Format("            \"${PROJECT_TOP_LEVEL_PATH_LINUX}\%s\"%s", tmpStringA, EOL));
+                    m_ContentCMakeListTarget.append(wxString::Format("            \"%s\"%s", tmpStringA, EOL));
                 }
                 else
                 {
@@ -1102,8 +1055,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
 
         case ttStaticLib:
         case ttDynamicLib:
-            // m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY \"${PROJECT_TOP_LEVEL_PATH_LINUX}\%s\")%s", wxsOutputDir, EOL));
-            m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY \"${PROJECT_TOP_LEVEL_PATH_LINUX}\%s\")%s", wxsOutputDir, EOL));
+            m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}\%s\")%s", wxsOutputDir, EOL));
             break;
 
         default:
@@ -1130,7 +1082,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             m_ContentCMakeListTarget.append(" SUFFIX \"\" ");
         }
     }
-    m_ContentCMakeListTarget.append(wxString::Format(" RUNTIME_OUTPUT_DIRECTORY \"${PROJECT_TOP_LEVEL_PATH_LINUX}\%s\")%s", wxsOutputDir, EOL));
+    m_ContentCMakeListTarget.append(wxString::Format(" RUNTIME_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}\%s\")%s", wxsOutputDir, EOL));
     // end if set_target_properties
 
     m_ContentCMakeListTarget.append(EOL);
@@ -1338,7 +1290,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             m_ContentCMakeListTarget.append(wxString::Format("add_custom_command(\n"
                                                              "                   TARGET ${TARGET_OUTPUTNAME}\n"
                                                              "                   PRE_BUILD COMMAND %s\n"
-                                                             "                   WORKING_DIRECTORY ${PROJECT_TOP_LEVEL_PATH_LINUX}\n"
+                                                             "                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}\n"
                                                              "                  )%s%s",
                                                              tmpStringA,
                                                              EOL, EOL)
@@ -1387,7 +1339,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             m_ContentCMakeListTarget.append(wxString::Format("add_custom_command(\n"
                                                              "                   TARGET ${TARGET_OUTPUTNAME}\n"
                                                              "                   POST_BUILD COMMAND %s\n"
-                                                             "                   WORKING_DIRECTORY ${PROJECT_TOP_LEVEL_PATH_LINUX}\n"
+                                                             "                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}\n"
                                                              "                  )%s%s",
                                                              tmpStringA,
                                                              EOL, EOL)
@@ -1397,8 +1349,6 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
         m_ContentCMakeListTarget.append(EOL);
     }
 
-    m_ContentCMakeListTarget.append(wxString::Format("unset(PROJECT_TOP_LEVEL_PATH_LINUX)%s", EOL));
-    m_ContentCMakeListTarget.append(wxString::Format("unset(PROJECT_TOP_LEVEL_PATH_WINDOWS)%s", EOL));
     m_ContentCMakeListTarget.append(wxString::Format("unset(TARGET_OUTPUTNAME)%s", EOL));
     // ====================================================================================
     m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
