@@ -706,13 +706,13 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
     m_ContentCMakeListTarget.append(EOL);
     m_ContentCMakeListTarget.append(wxString::Format("project(\"%s\")%s", targetTitle, EOL));
     m_ContentCMakeListTarget.append(wxString::Format("set(TARGET_OUTPUTNAME \"%s\")%s", targetOutPutName, EOL));
+#ifdef DEBUG
     m_ContentCMakeListTarget.append(wxString::Format("# Target Title: %s%s", targetTitle, EOL));
     m_ContentCMakeListTarget.append(wxString::Format("# Target targetOutPutFullName: %s%s",  targetOutPutFullName, EOL));
     m_ContentCMakeListTarget.append(wxString::Format("# Target prefix_auto: %s%s",  (targetPrefixPolicy == tgfpPlatformDefault)? "True(1)":"False(0)", EOL));
     m_ContentCMakeListTarget.append(wxString::Format("# Target extension_auto: %s%s",  (targetExtensionPolicy == tgfpPlatformDefault)? "True(1)":"False(0)", EOL));
     m_ContentCMakeListTarget.append(wxString::Format("# Project Compiler: %s%s", project->GetCompilerID(), EOL));
     m_ContentCMakeListTarget.append(wxString::Format("# Target Compiler:  %s%s", buildTarget->GetCompilerID(), EOL));
-
 
     if (platform::windows)
     {
@@ -756,7 +756,9 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             break;
     }
 
+#endif
     wxString sTargetRootDir = GetTargetRootDirectory(buildTarget);
+#ifdef DEBUG
     m_ContentCMakeListTarget.append(wxString::Format("# Target detected root directory:  %s%s", sTargetRootDir, EOL));
     m_ContentCMakeListTarget.append(wxString::Format("# Target Options:%s", EOL));
     m_ContentCMakeListTarget.append(wxString::Format("#                 projectCompilerOptionsRelation: %s%s",     GetHumanReadableOptionRelation(buildTarget, ortCompilerOptions), EOL));
@@ -769,6 +771,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
     // ====================================================================================
     m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
     m_ContentCMakeListTarget.append(EOL);
+#endif
     // ====================================================================================
     m_ContentCMakeListTarget.append(wxString::Format("# Include CMakePrintHelpers module:%s", EOL));
     m_ContentCMakeListTarget.append(wxString::Format("include(CMakePrintHelpers)%s", EOL));
@@ -830,15 +833,23 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
 
     for (unsigned int j = 0; j < tmpArrayA.GetCount(); j++)
     {
+#ifdef DEBUG
         m_ContentCMakeListTarget.append(wxString::Format("# tmpArrayA[%d]:%s%s", j, tmpArrayA[j], EOL));
+#endif
         tmpStringA += wxString::Format("\"%s\"%s                    ", tmpArrayA[j], EOL);
     }
 
     if (!tmpStringA.IsEmpty())
     {
+#ifdef DEBUG
         m_ContentCMakeListTarget.append(wxString::Format("# Compiler Include paths:%s%s", tmpStringA, EOL));
+#else
+        m_ContentCMakeListTarget.append(wxString::Format("# Compiler Include paths:%s", EOL));
+#endif
         ConvertMacros(tmpStringA, m_eMacroConvertDirectorySeperator);
+#ifdef DEBUG
         m_ContentCMakeListTarget.append(wxString::Format("# Compiler Include paths after convert:%s%s", tmpStringA, EOL));
+#endif
         m_ContentCMakeListTarget.append(wxString::Format("include_directories(%s)%s", tmpStringA, EOL));
         m_ContentCMakeListTarget.append(EOL);
     }
