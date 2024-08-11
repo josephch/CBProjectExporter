@@ -789,13 +789,13 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
 
             if (tmpStringA.IsSameAs(prjSearchDirs[i]))
             {
-                prjSearchDirs[i]  = wxString::Format("%s%s", prjBasepath, prjSearchDirs[i]);
+                prjSearchDirs[i]  = wxString::Format("%s/%s", prjBasepath, prjSearchDirs[i]);
             }
             else
             {
                 if (wxDir::Exists(tmpStringA) && !::wxIsAbsolutePath(tmpStringA))
                 {
-                    prjSearchDirs[i]  = wxString::Format("%s%s", prjBasepath, prjSearchDirs[i]);
+                    prjSearchDirs[i]  = wxString::Format("%s/%s", prjBasepath, prjSearchDirs[i]);
                 }
             }
         }
@@ -830,13 +830,15 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
 
     for (unsigned int j = 0; j < tmpArrayA.GetCount(); j++)
     {
-        tmpStringA += wxString::Format("\"%s\"%s                    ", UnixFilename(tmpArrayA[j], wxPATH_UNIX), EOL);
+        m_ContentCMakeListTarget.append(wxString::Format("# tmpArrayA[%d]:%s%s", j, tmpArrayA[j], EOL));
+        tmpStringA += wxString::Format("\"%s\"%s                    ", tmpArrayA[j], EOL);
     }
 
     if (!tmpStringA.IsEmpty())
     {
-        m_ContentCMakeListTarget.append(wxString::Format("# Compiler Include paths:%s", EOL));
+        m_ContentCMakeListTarget.append(wxString::Format("# Compiler Include paths:%s%s", tmpStringA, EOL));
         ConvertMacros(tmpStringA, m_eMacroConvertDirectorySeperator);
+        m_ContentCMakeListTarget.append(wxString::Format("# Compiler Include paths after convert:%s%s", tmpStringA, EOL));
         m_ContentCMakeListTarget.append(wxString::Format("include_directories(%s)%s", tmpStringA, EOL));
         m_ContentCMakeListTarget.append(EOL);
     }
@@ -1099,11 +1101,11 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             break;
 
         case ttStaticLib:
-            m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}\%s\")%s", wxsOutputDir, EOL));
+            m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}/\%s\")%s", wxsOutputDir, EOL));
             break;
 
         case ttDynamicLib:
-            m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}\%s\")%s", wxsOutputDir, EOL));
+            m_ContentCMakeListTarget.append(wxString::Format("set_target_properties(${TARGET_OUTPUTNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}/\%s\")%s", wxsOutputDir, EOL));
             break;
 
         default:
@@ -1130,7 +1132,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             m_ContentCMakeListTarget.append(" SUFFIX \"\" ");
         }
     }
-    m_ContentCMakeListTarget.append(wxString::Format(" RUNTIME_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}\%s\")%s", wxsOutputDir, EOL));
+    m_ContentCMakeListTarget.append(wxString::Format(" RUNTIME_OUTPUT_DIRECTORY \"${CMAKE_SOURCE_DIR}/\%s\")%s", wxsOutputDir, EOL));
     // end if set_target_properties
 
     m_ContentCMakeListTarget.append(EOL);
@@ -1342,7 +1344,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             }
             else
             {
-                tmpStringA.Replace("$(TARGET_OUTPUT_DIR)", wxString::Format("${PROJECT_TOP_LEVEL_PATH_LINUX}\%s", wxsOutputDir));
+                tmpStringA.Replace("$(TARGET_OUTPUT_DIR)", wxString::Format("${CMAKE_SOURCE_DIR}/\%s", wxsOutputDir));
             }
 
             ConvertMacros(tmpStringA, WindowsExpandKeepTrailing);
@@ -1385,14 +1387,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
                 //    tmpStringA.Replace(" devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)", " $(PROJECT_DIR)devel$(#WXWIDGETS.WX_VERSION)_$(#CB_BUILD.OSBITS)");
             }
 
-            if (platform::windows)
-            {
-                tmpStringA.Replace("$(TARGET_OUTPUT_DIR)", wxString::Format("${PROJECT_TOP_LEVEL_PATH_WINDOWS}\%s", wxsOutputDir));
-            }
-            else
-            {
-                tmpStringA.Replace("$(TARGET_OUTPUT_DIR)", wxString::Format("${PROJECT_TOP_LEVEL_PATH_LINUX}\%s", wxsOutputDir));
-            }
+            tmpStringA.Replace("$(TARGET_OUTPUT_DIR)", wxString::Format("${CMAKE_SOURCE_DIR}/\%s", wxsOutputDir));
 
             ConvertMacros(tmpStringA, WindowsExpandKeepTrailing);
             m_ContentCMakeListTarget.append(wxString::Format("# %s%s", tmpArrayA[j], EOL));
@@ -1502,7 +1497,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             tmpStringA.Replace("\\", "\\\\");
             m_ContentCMakeListTarget.Replace(projectTopLevelPathWindows, "${PROJECT_TOP_LEVEL_PATH_WINDOWS}", true);
             m_ContentCMakeListTarget.Replace(tmpStringA, "${PROJECT_TOP_LEVEL_PATH_WINDOWS}", true);
-            m_ContentCMakeListTarget.Replace(projectTopLevelPathLinux,   "${PROJECT_TOP_LEVEL_PATH_LINUX}", true);
+            m_ContentCMakeListTarget.Replace(projectTopLevelPathLinux,   "${CMAKE_SOURCE_DIR}", true);
 
             if (!m_CBProjectRootDir.IsEmpty())
             {
