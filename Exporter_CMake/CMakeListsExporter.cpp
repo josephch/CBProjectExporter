@@ -765,16 +765,6 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
     m_ContentCMakeListTarget.append(wxString::Format("#                 projectLibDirsRelation: %s%s",             GetHumanReadableOptionRelation(buildTarget, ortLibDirs), EOL));
     m_ContentCMakeListTarget.append(wxString::Format("#                 projectResourceIncludeDirsRelation: %s%s", GetHumanReadableOptionRelation(buildTarget, ortResDirs), EOL));
     m_ContentCMakeListTarget.append(EOL);
-    // ====================================================================================
-    m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
-    m_ContentCMakeListTarget.append(EOL);
-    // ====================================================================================
-
-    // ====================================================================================
-    m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
-    m_ContentCMakeListTarget.append(EOL);
-    // ====================================================================================
-    m_ContentCMakeListTarget.append(wxString::Format("cmake_minimum_required(VERSION %s) %s", CMAKE_MIN_VERSION_REQUIRED, EOL));
 
     // ====================================================================================
     m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
