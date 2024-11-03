@@ -815,13 +815,13 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
 
             if (tmpStringA.IsSameAs(tgtSearchDirs[i]))
             {
-                tgtSearchDirs[i]  = wxString::Format("%s%s", prjBasepath, tgtSearchDirs[i]);
+                tgtSearchDirs[i]  = wxString::Format("%s/%s", prjBasepath, tgtSearchDirs[i]);
             }
             else
             {
                 if (wxDir::Exists(tmpStringA) && !::wxIsAbsolutePath(tmpStringA))
                 {
-                    tgtSearchDirs[i]  = wxString::Format("%s%s", prjBasepath, tgtSearchDirs[i]);
+                    tgtSearchDirs[i]  = wxString::Format("%s/%s", prjBasepath, tgtSearchDirs[i]);
                 }
             }
         }
@@ -1315,12 +1315,13 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
         m_ContentCMakeListTarget.append(wxString::Format("target_link_directories(${TARGET_OUTPUTNAME} PUBLIC ${LINKER_DIR_LIST})%s", EOL));
         m_ContentCMakeListTarget.append(wxString::Format("unset(LINKER_DIR_LIST)%s", EOL));
         m_ContentCMakeListTarget.append(EOL);
+        // ====================================================================================
+        m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
+        m_ContentCMakeListTarget.append(EOL);
+        // ====================================================================================
     }
 
-    // ====================================================================================
-    m_ContentCMakeListTarget.append(wxString::Format("# -------------------------------------------------------------------------------------------------%s", EOL));
-    m_ContentCMakeListTarget.append(EOL);
-    // ====================================================================================
+
     // Before build commands
     Manager::Get()->GetMacrosManager()->RecalcVars(project, nullptr, buildTarget);
     tmpArrayA = buildTarget->GetCommandsBeforeBuild();
