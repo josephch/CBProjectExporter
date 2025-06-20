@@ -19,7 +19,7 @@
 // ProjectExporter include files
 #include "CMakeListsExporter.h"
 
-#define CMAKE_MIN_VERSION_REQUIRED "3.24.0"
+#define CMAKE_MIN_VERSION_REQUIRED "3.10"
 
 CMakeListsExporter::CMakeListsExporter()
 {
