@@ -33,9 +33,6 @@
 			<Add option="-std=c++11" />
 			<Add option="-fPIC" />
 		</Compiler>
-		<Linker>
-			<Add option="-Wl,--no-undefined" />
-		</Linker>
 		<Unit filename="ExporterBase.cpp" />
 		<Unit filename="ExporterBase.h" />
 		<Unit filename="Exporter_AutoTools/AutotoolsExporter.cpp" />
