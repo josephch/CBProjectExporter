@@ -19,7 +19,6 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CODEBLOCKS_CFLAGS_OTHER}")
 find_package(wxWidgets REQUIRED)
 include(${wxWidgets_USE_FILE})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 # Compiler Definitions:
