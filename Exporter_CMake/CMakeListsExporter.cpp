@@ -15,11 +15,14 @@
 #include "uservarmanager.h"
 #include "wx/tokenzr.h"
 //#include "tinyxml.h"
+#include <array>
 
 // ProjectExporter include files
 #include "CMakeListsExporter.h"
 
 #define CMAKE_MIN_VERSION_REQUIRED "3.10"
+
+std::array<wxString,1> gCxxFlagsToIgnore = {"-g"};
 
 CMakeListsExporter::CMakeListsExporter()
 {
@@ -899,6 +902,10 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
             }
             wxString tmpStringCVT = tmpArrayA[j].Clone();
             ConvertMacros(tmpStringCVT, ConvertMacro_DirSeperator::WindowsExpand);
+            if(std::find(std::begin(gCxxFlagsToIgnore), std::end(gCxxFlagsToIgnore), tmpStringCVT) != std::end(gCxxFlagsToIgnore))
+            {
+                continue;
+            }
             tmpStringA += wxString::Format("set(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} %s\")%s", tmpStringCVT, EOL);
         }
     }
